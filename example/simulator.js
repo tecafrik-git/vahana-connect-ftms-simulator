@@ -160,6 +160,11 @@ var notifyPowerCSP = function() {
 
 // Simulate FTMS Smart Trainer - Broadcasting Power and Cadence
 var notifyPowerFTMS = function() {
+  if (!zwackBLE.ftms.fmcpc.isStarted) {
+    console.log('FTMS Smart Trainer is not started');
+    setTimeout(notifyPowerFTMS, notificationInterval);
+    return;
+  }
   watts = Math.floor(Math.random() * randomness + power);
   cadence = Math.floor(Math.random() + cadence)
 
