@@ -429,4 +429,4 @@ if (containsRSC) {
   notifyRSC();
 } // Simulate Running Speed and Cadence - Broadcasting Speed and Cadence
 
-module.exports = simulator;
+global.simulator = simulator;
