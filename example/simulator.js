@@ -1,7 +1,8 @@
 var ZwackBLE = require("../lib/zwack-ble-sensor");
 const readline = require("readline");
 const parseArgs = require("minimist");
-
+var qrcode = require('qrcode-terminal');
+const bleno = require("bleno");
 const args = parseArgs(process.argv.slice(2));
 
 var containsFTMS = false;
@@ -44,7 +45,7 @@ var instantaneousPace = 0;
 var averagePace = 0;
 var instantaneousPower = 0;
 var averagePower = 0;
-var resistanceLevel = 0;
+var resistanceLevel = 1;
 var expendedEnergy = 0;
 var heartRate = 0;
 var metabolicEquivalent = 0;
@@ -219,7 +220,7 @@ var notifyRowerDataFTMS = function () {
   averagePace = Math.floor(Math.random() * 60 + 20);
   instantaneousPower = Math.floor(Math.random() * 100 + 20);
   averagePower = Math.floor(Math.random() * 100 + 20);
-  resistanceLevel = Math.floor(Math.random() * 6 + 1);
+  resistanceLevel = simulator.resistanceLevel;
   expendedEnergy = expendedEnergy + Math.floor(Math.random() * 10 + 1);
   heartRate = Math.floor(Math.random() * 41 + 60);
   metabolicEquivalent = Math.floor(Math.random() * 10 + 1);
@@ -410,6 +411,7 @@ console.log(`[ZWack]  Advertising these services: ${args.variable}`);
 
 listKeys();
 listParams();
+qrcode.generate('MacBook Pro');
 
 // Comment or Uncomment each line depending on what is needed
 if (containsCSP && containsPWR && !containsCAD && !containsSPD) {
