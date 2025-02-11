@@ -65,7 +65,12 @@
     "minor": "npm version minor",
     "patch": "npm version patch",
     "simulator": "node ./example/simulator.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "pkg -t node18-windows-x64,node18-windows-arm64,node18-mac-x64,node18-mac-arm64 ."
   },
-  "version": "0.1.6"
+  "bin": "./example/simulator.js",
+  "version": "0.1.6",
+  "devDependencies": {
+    "pkg": "^5.8.1"
+  }
 }
