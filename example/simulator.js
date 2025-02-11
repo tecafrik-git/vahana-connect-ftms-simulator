@@ -1,30 +1,24 @@
+process.env.DEBUG = "*";
 var ZwackBLE = require("../lib/zwack-ble-sensor");
 const readline = require("readline");
 const parseArgs = require("minimist");
-var qrcode = require('qrcode-terminal');
+var qrcode = require("qrcode-terminal");
 const bleno = require("bleno");
 const args = parseArgs(process.argv.slice(2));
 
-var containsFTMS = false;
+var containsFTMS = true;
 var containsRSC = false;
 var containsCSP = false;
 var containsSPD = false;
 var containsPWR = false;
 var containsCAD = false;
 
-if (args.variable === undefined) {
-  console.error(
-    "Error: variable parameter is required eg: npm run simulator -- --variable=ftms"
-  );
-  process.exit(1);
-} else {
-  containsFTMS = args.variable.includes("ftms");
-  containsRSC = args.variable.includes("rsc");
-  containsCSP = args.variable.includes("csp");
-  containsSPD = args.variable.includes("speed");
-  containsPWR = args.variable.includes("power");
-  containsCAD = args.variable.includes("cadence");
-}
+// containsFTMS = args.variable.includes("ftms");
+containsRSC = args.variable?.includes("rsc");
+containsCSP = args.variable?.includes("csp");
+containsSPD = args.variable?.includes("speed");
+containsPWR = args.variable?.includes("power");
+containsCAD = args.variable?.includes("cadence");
 
 // default parameters
 var cadence = 90;
@@ -208,14 +202,17 @@ var notifyRowerDataFTMS = function () {
     return;
   }
 
-  elapsedTime = Math.floor((new Date().getTime() - simulator.startTime.getTime()) / 1000);
+  elapsedTime = Math.floor(
+    (new Date().getTime() - simulator.startTime.getTime()) / 1000
+  );
 
   console.log(new Date(), simulator.startTime, elapsedTime);
   remainingTime = 600 - elapsedTime;
   strokeRate = Math.floor(Math.random() * 60 + 20);
   strokeCount = elapsedTime * 1.1;
   averageStrokeRate = Math.floor(Math.random() * 60 + 20);
-  simulator.totalDistance = simulator.totalDistance + Math.floor(Math.random() * 10 + 1);
+  simulator.totalDistance =
+    simulator.totalDistance + Math.floor(Math.random() * 10 + 1);
   instantaneousPace = Math.floor(Math.random() * 60 + 20);
   averagePace = Math.floor(Math.random() * 60 + 20);
   instantaneousPower = Math.floor(Math.random() * 100 + 20);
@@ -411,7 +408,7 @@ console.log(`[ZWack]  Advertising these services: ${args.variable}`);
 
 listKeys();
 listParams();
-qrcode.generate('MacBook Pro');
+qrcode.generate("MacBook Pro");
 
 // Comment or Uncomment each line depending on what is needed
 if (containsCSP && containsPWR && !containsCAD && !containsSPD) {
