@@ -32,15 +32,22 @@ var sensorName = "Zwack";
 
 var simulator = {};
 
-var strokeRate = 0;
+var leftStrokeRate = 0;
+var rightStrokeRate = 0;
 var strokeCount = 0;
 var averageStrokeRate = 0;
 var instantaneousPace = 0;
 var averagePace = 0;
-var instantaneousPower = 0;
+var leftInstantaneousPower = 0;
+var rightInstantaneousPower = 0;
 var averagePower = 0;
-var resistanceLevel = 1;
+var leftFlexionResistanceLevel = 1;
+var leftExtensionResistanceLevel = 1;
+var rightFlexionResistanceLevel = 1;
+var rightExtensionResistanceLevel = 1;
 var expendedEnergy = 0;
+var energyPerHour = 0;
+var energyPerMinute = 0;
 var heartRate = 0;
 var metabolicEquivalent = 0;
 var elapsedTime = 0;
@@ -48,6 +55,10 @@ var remainingTime = 600;
 
 simulator.startTime = new Date();
 simulator.totalDistance = 0;
+simulator.leftFlexionResistanceLevel = leftFlexionResistanceLevel;
+simulator.leftExtensionResistanceLevel = leftExtensionResistanceLevel;
+simulator.rightFlexionResistanceLevel = rightFlexionResistanceLevel;
+simulator.rightExtensionResistanceLevel = rightExtensionResistanceLevel;
 
 var incr = 10;
 var runningIncr = 0.5;
@@ -208,17 +219,35 @@ var notifyRowerDataFTMS = function () {
 
   console.log(new Date(), simulator.startTime, elapsedTime);
   remainingTime = 600 - elapsedTime;
-  strokeRate = Math.floor(Math.random() * 60 + 20);
+  leftStrokeRate = Math.floor(Math.random() * 60 + 20);
+  rightStrokeRate = Math.floor(Math.random() * 60 + 20);
+  strokeRate = Math.round((leftStrokeRate + rightStrokeRate) / 2);
   strokeCount = elapsedTime * 1.1;
   averageStrokeRate = Math.floor(Math.random() * 60 + 20);
   simulator.totalDistance =
     simulator.totalDistance + Math.floor(Math.random() * 10 + 1);
   instantaneousPace = Math.floor(Math.random() * 60 + 20);
   averagePace = Math.floor(Math.random() * 60 + 20);
-  instantaneousPower = Math.floor(Math.random() * 100 + 20);
+  leftInstantaneousPower = Math.floor(Math.random() * 100 + 20);
+  rightInstantaneousPower = Math.floor(Math.random() * 100 + 20);
+  instantaneousPower = Math.round(
+    (leftInstantaneousPower + rightInstantaneousPower) / 2
+  );
   averagePower = Math.floor(Math.random() * 100 + 20);
-  resistanceLevel = simulator.resistanceLevel;
+  leftFlexionResistanceLevel = simulator.leftFlexionResistanceLevel;
+  leftExtensionResistanceLevel = simulator.leftExtensionResistanceLevel;
+  rightFlexionResistanceLevel = simulator.rightFlexionResistanceLevel;
+  rightExtensionResistanceLevel = simulator.rightExtensionResistanceLevel;
+  resistanceLevel = Math.floor(
+    (leftFlexionResistanceLevel +
+      leftExtensionResistanceLevel +
+      rightFlexionResistanceLevel +
+      rightExtensionResistanceLevel) /
+      4
+  );
   expendedEnergy = expendedEnergy + Math.floor(Math.random() * 10 + 1);
+  energyPerHour = Math.floor(Math.random() * 100 + 20);
+  energyPerMinute = Math.floor(Math.random() * 100 + 20);
   heartRate = Math.floor(Math.random() * 41 + 60);
   metabolicEquivalent = Math.floor(Math.random() * 10 + 1);
 
@@ -238,7 +267,21 @@ var notifyRowerDataFTMS = function () {
       metabolicEquivalent,
       elapsedTime,
       remainingTime,
+      energyPerHour,
+      energyPerMinute,
     });
+    setTimeout(() => {
+      zwackBLE.notifyVCS({
+        leftStrokeRate,
+        rightStrokeRate,
+        leftInstantaneousPower,
+        rightInstantaneousPower,
+        leftFlexionResistanceLevel,
+        leftExtensionResistanceLevel,
+        rightFlexionResistanceLevel,
+        rightExtensionResistanceLevel,
+      });
+    }, 100);
   } catch (e) {
     console.error(e);
   }
