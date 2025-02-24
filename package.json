@@ -55,7 +55,7 @@
   ],
   "license": "MIT",
   "main": "index.js",
-  "name": "zwack",
+  "name": "vahana-connect-ftms-simulator",
   "repository": {
     "type": "https",
     "url": "git+https://github.com/paixaop/zwack.git"
@@ -66,11 +66,16 @@
     "patch": "npm version patch",
     "simulator": "node ./example/simulator.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "pkg -t node18-windows-x64,node18-windows-arm64,node18-mac-x64,node18-mac-arm64 ."
+    "build-windows": "pkg -t node18-windows-x64 .",
+    "build-macos-x64": "pkg -t node18-mac-x64 . ",
+    "build-macos-arm64": "pkg -t node18-mac-arm64 ."
   },
   "bin": "./example/simulator.js",
   "version": "0.1.6",
   "devDependencies": {
     "pkg": "^5.8.1"
+  },
+  "pkg": {
+    "assets": "node_modules/usb/build/Release/*"
   }
 }
